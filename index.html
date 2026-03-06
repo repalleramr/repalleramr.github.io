@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#101317" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Baccarat V31" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="./styles.css" />
+  <title>Baccarat Tracker V31 Final</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <h1>Baccarat Tracker</h1>
+        <p>V31 Final PWA</p>
+      </div>
+      <button id="installBtn" class="ghost-btn hidden" type="button">Install App</button>
+    </header>
+
+    <div id="installHint" class="install-hint hidden" aria-live="polite"></div>
+
+    <main class="main-content">
+      <section class="tab-screen active" id="tab-play">
+        <div class="grid cards-3 top-stats">
+          <article class="card stat big-stat">
+            <div class="label">Bankroll</div>
+            <div class="value" id="bankrollValue">₹30,000</div>
+            <div class="muted">Starting bankroll</div>
+          </article>
+          <article class="card stat">
+            <div class="label">Rounds</div>
+            <div class="value" id="roundCount">0</div>
+            <div class="muted">Completed shoe entries</div>
+          </article>
+          <article class="card stat">
+            <div class="label">Active Numbers</div>
+            <div class="value" id="activeCount">0</div>
+            <div class="muted">Player + Banker combined</div>
+          </article>
+        </div>
+
+        <article class="card keypad-card">
+          <div class="section-head">
+            <h2>Player keypad</h2>
+            <span id="playerPending" class="pill">Pending: none</span>
+          </div>
+          <div class="keypad" id="playerKeypad"></div>
+        </article>
+
+        <article class="card keypad-card">
+          <div class="section-head">
+            <h2>Banker keypad</h2>
+            <span id="bankerPending" class="pill">Pending: none</span>
+          </div>
+          <div class="keypad" id="bankerKeypad"></div>
+        </article>
+
+        <div class="action-row">
+          <button id="undoBtn" type="button">Undo Last</button>
+          <button id="clearBtn" type="button">Clear Shoe</button>
+          <button id="newShoeBtn" type="button">New Shoe</button>
+        </div>
+
+        <div class="grid cards-2">
+          <article class="card">
+            <div class="section-head"><h2>Last round</h2></div>
+            <div id="lastRoundBox" class="summary-box empty-state">No round yet</div>
+          </article>
+          <article class="card">
+            <div class="section-head"><h2>Last 3 rounds</h2></div>
+            <div id="lastThreeBox" class="stack-list empty-state">No rounds yet</div>
+          </article>
+        </div>
+
+        <div class="grid cards-2">
+          <article class="card">
+            <div class="section-head"><h2>Exposure</h2></div>
+            <div id="exposureBox" class="stack-list"></div>
+          </article>
+          <article class="card">
+            <div class="section-head"><h2>Next bet info</h2></div>
+            <div id="nextBetBox" class="stack-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="tab-screen" id="tab-board">
+        <article class="card">
+          <div class="section-head"><h2>Live board</h2></div>
+          <div id="boardGrid" class="board-grid"></div>
+        </article>
+      </section>
+
+      <section class="tab-screen" id="tab-history">
+        <article class="card">
+          <div class="section-head"><h2>Round history</h2></div>
+          <div id="historyTableWrap"></div>
+        </article>
+      </section>
+
+      <section class="tab-screen" id="tab-analytics">
+        <div class="grid cards-2">
+          <article class="card">
+            <div class="section-head"><h2>Analytics summary</h2></div>
+            <div id="analyticsSummary" class="stack-list"></div>
+          </article>
+          <article class="card">
+            <div class="section-head"><h2>Target progress</h2></div>
+            <div id="targetProgressBox" class="stack-list"></div>
+          </article>
+        </div>
+        <article class="card">
+          <div class="section-head"><h2>Hot / repeat watch</h2></div>
+          <div id="heatMapBox" class="chip-wrap"></div>
+        </article>
+      </section>
+
+      <section class="tab-screen" id="tab-ladder">
+        <article class="card">
+          <div class="section-head"><h2>Bet ladder</h2></div>
+          <div id="ladderTableWrap"></div>
+        </article>
+      </section>
+
+      <section class="tab-screen" id="tab-settings">
+        <div class="grid cards-2">
+          <article class="card">
+            <div class="section-head"><h2>Bankroll settings</h2></div>
+            <label class="field">
+              <span>Starting bankroll</span>
+              <input id="startingBankrollInput" type="number" inputmode="decimal" min="0" step="100" />
+            </label>
+            <label class="field">
+              <span>Target profit</span>
+              <input id="targetProfitInput" type="number" inputmode="decimal" min="0" step="100" />
+            </label>
+            <button id="saveSettingsBtn" type="button">Save Settings</button>
+          </article>
+          <article class="card">
+            <div class="section-head"><h2>Strategy rules</h2></div>
+            <ul class="rules-list">
+              <li>Digits 1-9 activate tracking on first appearance for each side.</li>
+              <li>Digit 0 is recorded but does not activate a tracked number.</li>
+              <li>Next bet uses the ladder stage for each currently active number.</li>
+              <li>When an active number repeats on the same side, that number closes and resets.</li>
+              <li>New Shoe archives current shoe and clears only current round data.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tabbar bottom-tabbar" aria-label="Main tabs">
+      <button class="tab-btn active" data-tab="play" type="button"><span class="tab-emoji">▶</span><span>Play</span></button>
+      <button class="tab-btn" data-tab="board" type="button"><span class="tab-emoji">▦</span><span>Board</span></button>
+      <button class="tab-btn" data-tab="history" type="button"><span class="tab-emoji">⟲</span><span>History</span></button>
+      <button class="tab-btn" data-tab="analytics" type="button"><span class="tab-emoji">▤</span><span>Analytics</span></button>
+      <button class="tab-btn" data-tab="ladder" type="button"><span class="tab-emoji">⋮</span><span>Ladder</span></button>
+      <button class="tab-btn" data-tab="settings" type="button"><span class="tab-emoji">⚙</span><span>Settings</span></button>
+    </nav>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
